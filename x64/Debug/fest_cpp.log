@@ -1,3 +1,4 @@
 ﻿  fest_cpp.cpp
-C:\Users\My\OneDrive\Документы\конспекты\Системное программирование\fest_cpp\fest_cpp\fest_cpp.cpp(74,27): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\format(42): warning STL4038: The contents of <format> are available only with C++20 or later.
+C:\Users\My\OneDrive\Документы\конспекты\Системное программирование\fest_cpp\fest_cpp\fest_cpp.cpp(124,27): warning C4018: <: несоответствие типов со знаком и без знака
   fest_cpp.vcxproj -> C:\Users\My\OneDrive\Документы\конспекты\Системное программирование\fest_cpp\x64\Debug\fest_cpp.exe
