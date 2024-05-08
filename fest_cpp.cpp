@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
-#include <format>
 
 using namespace std;
 
@@ -17,6 +16,7 @@ bool DigitCheck(string str)
 
     if (find(dig.begin(), dig.end(), false) != dig.end())
     {
+        cout << "Enter a number!" << endl;
         return false;
     }
 
@@ -48,7 +48,51 @@ public:
         }
         this->isSold = false;
     }
+    void Info()
+    {
+        cout << "Merchandize name: " << name << "\nMerchandize type: " << type << "\nPrice: " << price <<"\n" << endl;
+    }
 };
+
+class MerchCollection {
+private:
+    int count;
+    Merch** merch;
+
+public:
+    MerchCollection(int size) {
+        count = 0;
+        merch = new Merch * [size]; //создание массива
+    }
+
+    MerchCollection(){}
+
+    void AddMerch(Merch* m) {
+        merch[count++] = m; //добавление человека в массив
+    }
+
+    void MerchOutput() {
+        for (int i = 0; i < count; i++)
+        {
+            if (merch[i]->isSold == false)
+            {
+                cout << i+1 << ". ";
+                merch[i]->Info();
+            }
+        }
+    }
+    string GetName(int index)
+    {
+        string Name = merch[index-1]->name;
+        return Name;
+    }
+
+    void ChangeStatus(int index)
+    {
+        merch[index-1]->isSold = true;
+    }
+};
+
 
 class Artist //художники
 {
@@ -63,73 +107,30 @@ public:
         this->exp = _exp;
     }
 
-    friend void SellMerch(Artist& artist, vector<Merch> merch) //мерч можно будет продавать только имея по крайней мере 5-летний опыт в рисовании
+    friend void SellMerch(Artist& artist, MerchCollection merch) //мерч можно будет продавать только имея по крайней мере 5-летний опыт в рисовании
     {
         if (artist.exp >= 5)
         {
-            string good;
+            string product;
             int index;
 
             do
             {
-                cout << "\t\tThis is " << artist.nickname << "'s merchandize. What to sell?" << endl;
-                for (Merch item : merch)
-                {
-                    if (item.isSold == false)
-                    {
-                        cout << "\nMerchandize name: " << item.name << "\nMerchandize type: " << item.type << "\nPrice: " << item.price << endl;
-                    }
-                }
-                cin >> good;
+                cout << "\t\tThis is " << artist.nickname << "'s merchandize. What to sell?\n" << endl;
+                merch.MerchOutput();
 
-                try
-                {
-                    index = atoi(good.c_str());
-                }
-                catch (...)
-                {
-                    cout << "Enter a number!" << endl;
-                }
-            } while (!DigitCheck(good));
+                cin >> product;
 
-            merch[index].isSold = true;
+                index = atoi(product.c_str());
 
-            cout << merch[index].name << " is sold successfully." << endl;
+            } while (!DigitCheck(product));
+
+            merch.ChangeStatus(index);
+            string soldMerch = merch.GetName(index);
+
+            cout << soldMerch << " is sold successfully." << endl;
         }
     }
-
-    void AddMerch(vector<Merch> merch)
-    {
-        string merchName, merchType, strPrice;
-        double merchPrice;
-
-        cout << "Enter merchandize name: " << endl;
-        cin >> merchName;
-        merchName[0] = toupper(merchName[0]);
-
-        cout << "Enter merchandize type: " << endl;
-        cin >> merchType;
-
-        do
-        {
-            cout << "Enter merchandize price: " << endl;
-            cin >> strPrice;
-
-            try
-            {
-                merchPrice = atoi(strPrice.c_str());
-            }
-            catch (...)
-            {
-                cout << "Enter a number!" << endl;
-            }
-        } while (!DigitCheck(strPrice));
-
-        Merch good{ merchName, merchType, merchPrice };
-
-        merch.push_back(good);
-    }
-
     void DrawRealTime()
     {
         string strDraw;
@@ -138,48 +139,73 @@ public:
         do
         {
             cout << "\t\tWhat to draw in real time? Enter price." << endl;
-            cout << "1. sketch(100) \n2. portrait(500) \n3. half(1000) \n4. full(3000)";
+            cout << "1. sketch(100) \n2. portrait(500) \n3. half(1000) \n4. full(3000)" << endl;
             cin >> strDraw;
 
-            try
-            {
-                draw = atoi(strDraw.c_str());
-            }
-            catch (...)
-            {
-                cout << "Enter a number!" << endl;
-            }
+            draw = atoi(strDraw.c_str());
+
         } while (!DigitCheck(strDraw));
 
-        if (draw == 100)
+        if (draw == 100 || draw == 1)
         {
             cout << "Starting drawing sketch..." << endl;
             Sleep(1000);
             cout << "\nSketch is drawn successfully." << endl;
         }
 
-        else if (draw == 500)
+        else if (draw == 500 || draw == 2)
         {
             cout << "Starting drawing portrait..." << endl;
             Sleep(5000);
             cout << "\nPortrait is drawn successfully." << endl;
         }
 
-        else if (draw == 1000)
+        else if (draw == 1000 || draw == 3)
         {
             cout << "Starting drawing half..." << endl;
             Sleep(10000);
             cout << "\nHalf is drawn successfully." << endl;
         }
 
-        else if (draw == 3000)
+        else if (draw == 3000 || draw == 4)
         {
             cout << "Starting drawing full..." << endl;
             Sleep(30000);
             cout << "\nFull is drawn successfully." << endl;
         }
     }
+
+    MerchCollection AddMerch(MerchCollection collection, int numMerch)
+    {
+        string merchName, merchType, strPrice;
+        double merchPrice;
+
+        for (int i = 0; i < numMerch; i++)
+        {
+            cout << "Enter merchandize name: " << endl;
+            cin >> merchName;
+            merchName[0] = toupper(merchName[0]);
+
+            cout << "Enter merchandize type: " << endl;
+            cin >> merchType;
+
+            do
+            {
+                cout << "Enter merchandize price: " << endl;
+                cin >> strPrice;
+
+                merchPrice = atoi(strPrice.c_str());
+
+            } while (!DigitCheck(strPrice));
+
+            Merch* new_merch = new Merch(merchName, merchType, merchPrice);
+
+            collection.AddMerch(new_merch);
+        }
+        return collection;
+    }
 };
+
 
 class Cosplayer//косплееры
 {
@@ -210,9 +236,17 @@ public:
 
     void WanderAround()
     {
-        cout << "How many miliseconds do you need for it, " << firstName << "?" << endl;
+        string strSec;
         int sec;
-        cin >> sec;
+
+        do
+        {
+            cout << "How many miliseconds do you need for it, " << firstName << "?" << endl;
+            cin >> strSec;
+
+            sec = atoi(strSec.c_str());
+
+        } while (!DigitCheck(strSec));
 
         cout <<"Wandering around...\n" << endl;
         Sleep(sec);
@@ -266,14 +300,8 @@ void CosplayerAct()
         cout << "Enter cosplayer's age: " << endl;
         cin >> ageString;
 
-        try
-        {
-            age = atoi(ageString.c_str());
-        }
-        catch (...)
-        {
-            cout << "Enter a number!" << endl;
-        }
+        age = atoi(ageString.c_str());
+      
     } while (!DigitCheck(ageString));
 
     cout << "\nEnter character's full name: " << endl;
@@ -319,9 +347,9 @@ void CosplayerAct()
 
 void ArtistAct()
 {
-    vector<Merch> merch;
     string artName, exp;
     unsigned int artExp;
+    MerchCollection collection;
 
     cout << "Enter your nickname: " << endl;
     cin >> artName;
@@ -331,14 +359,8 @@ void ArtistAct()
         cout << "How many years have you been drawing? " << endl;
         cin >> exp;
 
-        try
-        {
-            artExp = atoi(exp.c_str());
-        }
-        catch (...)
-        {
-            cout << "Enter a number!" << endl;
-        }
+        artExp = atoi(exp.c_str());
+     
     } while (!DigitCheck(exp));
 
     Artist artist{ artName, artExp };
@@ -354,12 +376,26 @@ void ArtistAct()
         {
             case '1':
             {
-                artist.AddMerch(merch);
+                string strNum;
+                int numMerch;
+
+                do
+                {
+                    cout << "Enter a number of merch: " << endl;
+                    cin >> strNum;
+                   
+                    numMerch = atoi(strNum.c_str());
+                    
+                } while (!DigitCheck(strNum));
+                
+                MerchCollection coll(numMerch);
+
+                collection = artist.AddMerch(coll, numMerch);
                 break;
             }
             case '2':
             {
-                SellMerch(artist, merch);
+                SellMerch(artist, collection);
                 break;
             }
             case '3':
