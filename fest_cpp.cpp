@@ -1,8 +1,9 @@
-﻿#include <iostream>
+﻿﻿#include <iostream>
 #include <Windows.h>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
+#include <format>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ bool DigitCheck(string str)
 
     if (find(dig.begin(), dig.end(), false) != dig.end())
     {
-        cout << "Enter a number!" << endl;
+        cout << "Введите число" << endl;
         return false;
     }
 
@@ -50,7 +51,7 @@ public:
     }
     void Info()
     {
-        cout << "Merchandize name: " << name << "\nMerchandize type: " << type << "\nPrice: " << price <<"\n" << endl;
+        cout << "Название: " << name << "\nВид: " << type << "\nЦена (руб.): " << price << "\n" << endl;
     }
 };
 
@@ -65,7 +66,7 @@ public:
         merch = new Merch * [size]; //создание массива
     }
 
-    MerchCollection(){}
+    MerchCollection() {}
 
     void AddMerch(Merch* m) {
         merch[count++] = m; //добавление человека в массив
@@ -76,20 +77,24 @@ public:
         {
             if (merch[i]->isSold == false)
             {
-                cout << i+1 << ". ";
+                cout << i + 1 << ". ";
                 merch[i]->Info();
             }
         }
     }
     string GetName(int index)
     {
-        string Name = merch[index-1]->name;
+        string Name = merch[index - 1]->name;
         return Name;
     }
 
     void ChangeStatus(int index)
     {
-        merch[index-1]->isSold = true;
+        merch[index - 1]->isSold = true;
+    }
+
+    int GetCount() {
+        return count;
     }
 };
 
@@ -109,6 +114,12 @@ public:
 
     friend void SellMerch(Artist& artist, MerchCollection merch) //мерч можно будет продавать только имея по крайней мере 5-летний опыт в рисовании
     {
+        if (merch.GetCount() <= 0)
+        {
+            cout << "\nПока нечего продать" << endl;
+            return;
+        }
+
         if (artist.exp >= 5)
         {
             string product;
@@ -116,7 +127,7 @@ public:
 
             do
             {
-                cout << "\t\tThis is " << artist.nickname << "'s merchandize. What to sell?\n" << endl;
+                cout << "\t\tЭто твой мерч, " << artist.nickname << ". Что продавать?\n" << endl;
                 merch.MerchOutput();
 
                 cin >> product;
@@ -128,7 +139,7 @@ public:
             merch.ChangeStatus(index);
             string soldMerch = merch.GetName(index);
 
-            cout << soldMerch << " is sold successfully." << endl;
+            cout << soldMerch << " успешно продано." << endl;
         }
     }
     void DrawRealTime()
@@ -138,8 +149,8 @@ public:
 
         do
         {
-            cout << "\t\tWhat to draw in real time? Enter price." << endl;
-            cout << "1. sketch(100) \n2. portrait(500) \n3. half(1000) \n4. full(3000)" << endl;
+            cout << "\t\tЧто писать в риальном времени? Выберите:." << endl;
+            cout << "1. Набросок (100 руб.) \n2. Портрет (500 руб.) \n3. Карикатура (1000 руб.) \n4. Колоссальный портрет (3000 руб.)" << endl;
             cin >> strDraw;
 
             draw = atoi(strDraw.c_str());
@@ -148,30 +159,30 @@ public:
 
         if (draw == 100 || draw == 1)
         {
-            cout << "Starting drawing sketch..." << endl;
+            cout << "Набросок в процессе написания..." << endl;
             Sleep(1000);
-            cout << "\nSketch is drawn successfully." << endl;
+            cout << "\nНабросок успешно написан." << endl;
         }
 
         else if (draw == 500 || draw == 2)
         {
-            cout << "Starting drawing portrait..." << endl;
+            cout << "Портрет в процессе написания..." << endl;
             Sleep(5000);
-            cout << "\nPortrait is drawn successfully." << endl;
+            cout << "\nПортрет успешно написан." << endl;
         }
 
         else if (draw == 1000 || draw == 3)
         {
-            cout << "Starting drawing half..." << endl;
+            cout << "Карикатура в процессе написания..." << endl;
             Sleep(10000);
-            cout << "\nHalf is drawn successfully." << endl;
+            cout << "\nКарикатура успешно написана." << endl;
         }
 
         else if (draw == 3000 || draw == 4)
         {
-            cout << "Starting drawing full..." << endl;
+            cout << "Колоссальный портрет в процессе написания..." << endl;
             Sleep(30000);
-            cout << "\nFull is drawn successfully." << endl;
+            cout << "\nКолоссальный портрет успешно написан." << endl;
         }
     }
 
@@ -182,16 +193,16 @@ public:
 
         for (int i = 0; i < numMerch; i++)
         {
-            cout << "Enter merchandize name: " << endl;
+            cout << "Введите название мерча: " << endl;
             cin >> merchName;
             merchName[0] = toupper(merchName[0]);
 
-            cout << "Enter merchandize type: " << endl;
+            cout << "Введите вид мерча: " << endl;
             cin >> merchType;
 
             do
             {
-                cout << "Enter merchandize price: " << endl;
+                cout << "Введите стоимость (руб.): " << endl;
                 cin >> strPrice;
 
                 merchPrice = atoi(strPrice.c_str());
@@ -218,20 +229,20 @@ public:
         this->name = _charname;
         this->fandom = _fandom;
 
-        cout << "\n\tWelcome, " << firstName << " " << lastName << "!" << endl;
-        cout << "\t\t" << firstName << " is currently cosplaying " << name << " from " << fandom << "." << endl;
+        cout << "\n\tДобро пожаловать, " << firstName << " " << lastName << "!" << endl;
+        cout << "\t\t" << firstName << " косплеит " << name << " из " << fandom << "." << endl;
     }
 
     void ChangeCharacter()
     {
-        cout << "\nEnter character's full name: " << endl;
+        cout << "\nВведите имя персонажа: " << endl;
         cin >> name;
         name[0] = toupper(name[0]);
 
-        cout << "Where is the character " << name << " from?" << endl;
+        cout << "Откуда ваш персонаж:" << name << " ?" << endl;
         cin >> fandom;
 
-        cout << "\t\t" << firstName << " is currently cosplaying " << name << " from " << fandom << "." << endl;
+        cout << "\t\t" << firstName << " косплеит " << name << " из " << fandom << "." << endl;
     }
 
     void WanderAround()
@@ -241,26 +252,26 @@ public:
 
         do
         {
-            cout << "How many miliseconds do you need for it, " << firstName << "?" << endl;
+            cout << "Сколько милисекунд тебе нужно на это, " << firstName << "?" << endl;
             cin >> strSec;
 
             sec = atoi(strSec.c_str());
 
         } while (!DigitCheck(strSec));
 
-        cout <<"Wandering around...\n" << endl;
+        cout << "Прогуливаешься вокруг...\n" << endl;
         Sleep(sec);
 
-        cout << firstName << " has successfully wandered around." << endl;
+        cout << firstName << " в конечном итоге вернулся на место, где начал прогулку." << endl;
     }
 
     void PeopleInteract()
     {
-        string interaction[4] = { " took photo with a person.", " hugged a person.", " talked to a person.", " gave the autograph to a person."};
+        string interaction[4] = { " сделал(-а) фото со случайным человеком.", " обнял(-а) случаного человека.", " поговорил(-а) со случайным человеком.", " дал(-а) автогроаф фанату." };
 
         srand(static_cast<unsigned int>(time(0))); //посев рандомайзера
 
-        cout << firstName << " is going to interact with " << age << " people.\n\n" << endl;
+        cout << firstName << " развлекается с " << age << " людьми.\n\n" << endl;
         for (int i = 0; i < age; i++)
         {
             int rnd = rand(); //создание рандомайзера
@@ -277,9 +288,57 @@ private:
     string name;
 };
 
-class Participant //посетители
+class Practicant //посетители
 {
+private:
+    string name;
+    double balance;
 
+public:
+    Practicant(string name, double balance) {
+        this->name = name;
+        this->balance = balance;
+    }
+
+    double getBalance() const {
+        return balance;
+    }
+
+    void BuyMerch(vector<Merch>& merch) {
+        string product;
+        int index;
+
+        do {
+            cout << "\t\tAvailable merchandize. What to buy?" << endl;
+            for (size_t i = 0; i < merch.size(); i++) {
+                if (!merch[i].isSold) {
+                    cout << i << ". Merchandize name: " << merch[i].name << "\nMerchandize type: " << merch[i].type << "\nPrice: " << merch[i].price << endl;
+                }
+            }
+            cin >> product;
+
+            try {
+                index = atoi(product.c_str());
+            }
+            catch (...) {
+                cout << "Enter a number!" << endl;
+            }
+        } while (!DigitCheck(product) || index >= merch.size() || merch[index].isSold);
+
+        if (balance >= merch[index].price) {
+            balance -= merch[index].price;
+            merch[index].isSold = true;
+            cout << name << " купил " << merch[index].name << ". Остаток на карте: " << balance << endl;
+            // Вывод чека
+            cout << "\n--- Чек ---" << endl;
+            cout << "Мерч: " << merch[index].name << endl;
+            cout << "Сумма покупки: " << merch[index].price << endl;
+            cout << "Остаток на карте: " << balance << endl;
+        }
+        else {
+            cout << "Not enough budget to buy " << merch[index].name << endl;
+        }
+    }
 };
 
 void CosplayerAct()
@@ -301,7 +360,7 @@ void CosplayerAct()
         cin >> ageString;
 
         age = atoi(ageString.c_str());
-      
+
     } while (!DigitCheck(ageString));
 
     cout << "\nEnter character's full name: " << endl;
@@ -322,25 +381,25 @@ void CosplayerAct()
 
         switch (what)
         {
-            case '1':
-            {
-                cosplayer.WanderAround();
-                break;
-            }
-            case '2':
-            {
-                cosplayer.PeopleInteract();
-                break;
-            }
-            case '3':
-            {
-                cosplayer.ChangeCharacter();
-                break;
-            }
-            case '4':
-            {
-                break;
-            }
+        case '1':
+        {
+            cosplayer.WanderAround();
+            break;
+        }
+        case '2':
+        {
+            cosplayer.PeopleInteract();
+            break;
+        }
+        case '3':
+        {
+            cosplayer.ChangeCharacter();
+            break;
+        }
+        case '4':
+        {
+            break;
+        }
         }
     } while (what != '4');
 }
@@ -360,7 +419,7 @@ void ArtistAct()
         cin >> exp;
 
         artExp = atoi(exp.c_str());
-     
+
     } while (!DigitCheck(exp));
 
     Artist artist{ artName, artExp };
@@ -374,92 +433,116 @@ void ArtistAct()
 
         switch (what)
         {
-            case '1':
-            {
-                string strNum;
-                int numMerch;
+        case '1':
+        {
+            string strNum;
+            int numMerch;
 
-                do
-                {
-                    cout << "Enter a number of merch: " << endl;
-                    cin >> strNum;
-                   
-                    numMerch = atoi(strNum.c_str());
-                    
-                } while (!DigitCheck(strNum));
-                
-                MerchCollection coll(numMerch);
+            do
+            {
+                cout << "Enter a number of merch: " << endl;
+                cin >> strNum;
 
-                collection = artist.AddMerch(coll, numMerch);
-                break;
-            }
-            case '2':
-            {
-                SellMerch(artist, collection);
-                break;
-            }
-            case '3':
-            {
-                artist.DrawRealTime();
-                break;
-            }
-            case '4':
-            {
-                break;
-            }
+                numMerch = atoi(strNum.c_str());
+
+            } while (!DigitCheck(strNum));
+
+            MerchCollection coll(numMerch);
+
+            collection = artist.AddMerch(coll, numMerch);
+            break;
+        }
+        case '2':
+        {
+            SellMerch(artist, collection);
+            break;
+        }
+        case '3':
+        {
+            artist.DrawRealTime();
+            break;
+        }
+        case '4':
+        {
+            break;
+        }
         }
     } while (what != '4');
-    
-    
+
+
 }
 
-void ParticipantAct() // функция для посетителя
+void ParticipantAct()
 {
-    vector<Merch> merch; //официальный мерч от феста. можно будет что-нибудь добавить туда
+    string name;
+    double balance;
 
-    Merch first{ "Pikachu sparkling keychain", "keychain", 510 };
-    merch.push_back(first);
+    cout << "Enter your name: ";
+    cin >> name;
 
-    Merch second{ "Mewtwo purple badge", "badge", 200 };
-    merch.push_back(second);
+    cout << "Enter your budget (руб.): ";
+    cin >> balance;
 
-    Merch third{ "Cat ears with decorations", "headband", 3500 };
-    merch.push_back(third);
+    while (balance <= 0) {
+        cout << "Invalid input! Please enter a positive number for your budget (руб.): ";
+        cin >> balance;
+    }
 
-    for (Merch item : merch)
-    {
-        if (item.isSold == false)
-        {
-            cout << "\nMerchandize name: " << item.name << "\nMerchandize type: " << item.type << "\nPrice: " << item.price << endl;
+    while (true) {
+        cout << "\n\t\tWELCOME TO THE FESTIVAL, " << name << "!\n";
+        cout << "1. Buy merchandise\n";
+        cout << "2. Exit\n";
+
+        int opt;
+        cin >> opt;
+
+        vector<Merch> merch;
+
+        Practicant practicant(name, balance);
+
+        switch (opt) {
+        case 1: {
+            practicant.BuyMerch(merch);
+            balance = practicant.getBalance();
+            break;
+        }
+        case 2: {
+            return;
+        }
+        default: {
+            cout << "Invalid option. Please try again.\n";
+        }
         }
     }
 }
 
 int main()
 {
-    cout << "\t\tWELCOME TO THE FESTIVAL!\n" << endl;
-    cout << "1. cosplayers\n2. artists\n3. ordinary participant" << endl;
+    setlocale(LC_ALL, "RUS");
 
-    int opt;
-    cin >> opt;
-
-    switch (opt)
+    while (true)
     {
-        case 1:
+        cout << "\t\tДобро пожаловать на фестиваль!\n" << endl;
+        cout << "1. Косплеер\n2. Художник\n3. Фанат\n4. Уйти\n" << endl;
+        cout << "Кто ты?...\n" << endl;
+
+        int opt;
+        cin >> opt;
+
+        switch (opt)
         {
+        case 1:
             CosplayerAct();
             break;
-        }
         case 2:
-        {
             ArtistAct();
             break;
-        }
         case 3:
-        {
             ParticipantAct();
             break;
+        case 4:
+            cout << "\nЖаль..." << endl;
+            return 0;
         }
     }
 }
-
