@@ -69,7 +69,7 @@ public:
     MerchCollection() {}
 
     void AddMerch(Merch* m) {
-        merch[count++] = m; //добавление человека в массив
+        merch[count++] = m; //добавление мерча в массив
     }
 
     void MerchOutput() {
@@ -98,13 +98,6 @@ public:
     }
 
     int GetCount() {
-      /*  for (int i = 0; i < count; i++)
-        {
-            if (merch[i]->isSold == false)
-            {
-                count = i;
-            }
-        }*/
         return count;
     }
 };
@@ -160,7 +153,7 @@ public:
 
         do
         {
-            cout << "\t\tЧто писать в риальном времени? Выберите:." << endl;
+            cout << "\t\tЧто писать в режиме реального времени? Выберите:." << endl;
             cout << "1. Набросок (100 руб.) \n2. Портрет (500 руб.) \n3. Карикатура (1000 руб.) \n4. Колоссальный портрет (3000 руб.)" << endl;
             cin >> strDraw;
 
@@ -526,6 +519,8 @@ void ParticipantAct(MerchCollection collection)
 int main()
 {
     setlocale(LC_ALL, "RUS");
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
 
     MerchCollection merches;
 
